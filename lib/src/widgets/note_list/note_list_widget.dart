@@ -17,28 +17,34 @@ class NoteListWidget extends StatefulWidget {
 class NoteListState extends State<NoteListWidget> {
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
+    return ListView.builder(
       itemCount: widget.items.length,
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
-          child: Column(
-            children: <Widget>[
-              Container(
-                child: Text(
-                  widget.items[index].title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          child: Card(
+            margin: const EdgeInsets.fromLTRB(4, 8, 4, 0),
+            elevation: 1,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+                  child: Text(
+                    widget.items[index].title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              Container(
-                child: Text(
-                  widget.items[index].title,
-                  textAlign: TextAlign.justify,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
-                ),
-              )
-            ],
+                Container(
+                  padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+                  child: Text(
+                    widget.items[index].body,
+                    textAlign: TextAlign.justify,
+                    style:
+                        TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+                  ),
+                )
+              ],
+            ),
           ),
           onTap: () => Scaffold.of(context)
               .showSnackBar(SnackBar(content: Text("Cliquei no item $index"))),
