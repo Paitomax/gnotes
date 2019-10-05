@@ -8,7 +8,11 @@ class AddNoteBloc extends Bloc<AddNoteEvent, AddNoteState> {
   AddNoteState get initialState => AddNoteUninitialized();
 
   @override
-  Stream<AddNoteState> mapEventToState(AddNoteEvent event) {
-    return null;
+  Stream<AddNoteState> mapEventToState(AddNoteEvent event) async*{
+    if (event is AddNoteSubmit){
+      yield AddNoteLoading();
+      // add note
+      yield AddNoteLoaded();
+    }
   }
 }

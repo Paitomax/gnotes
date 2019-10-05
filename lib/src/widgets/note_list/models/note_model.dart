@@ -4,5 +4,5 @@ class NoteModel {
   String body;
   DateTime dateTime;
 
-  NoteModel(this.id, this.title, this.body, {this.dateTime});
+  NoteModel(this.title, this.body, {this.id, this.dateTime});
 }
