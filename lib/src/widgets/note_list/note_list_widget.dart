@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'models/note_model.dart';
 
 class NoteListWidget extends StatefulWidget {
-  List<NoteModel> items;
+  final List<NoteModel> items;
 
   NoteListWidget(this.items);
 

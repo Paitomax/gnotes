@@ -1,1 +1,3 @@
-abstract class NoteListWidgetEvent{}
+abstract class NoteListWidgetEvent {}
+
+class NoteListWidgetFetchEvent extends NoteListWidgetEvent {}
