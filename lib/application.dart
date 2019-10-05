@@ -8,6 +8,10 @@ class GNoteApplication extends StatelessWidget {
     return MaterialApp(
       title: 'GNote',
       theme: ThemeData(
+        buttonColor: Colors.blue,
+        buttonTheme: ButtonThemeData(
+          textTheme: ButtonTextTheme.primary
+        ),
         primarySwatch: Colors.blue,
       ),
       home: HomeScreen(),
