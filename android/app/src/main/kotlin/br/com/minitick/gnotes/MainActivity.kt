@@ -1,4 +1,4 @@
-package minitick.com.br.gnotes
+package br.com.minitick.gnotes
 
 import android.os.Bundle
 
