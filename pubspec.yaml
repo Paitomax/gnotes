@@ -20,6 +20,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  build_runner: ^1.0.0
+  json_serializable: ^3.2.2
   meta: ^1.1.7
   equatable: ^0.6.1
   bloc: ^0.15.0

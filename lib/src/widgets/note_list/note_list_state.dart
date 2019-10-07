@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import 'models/note_model.dart';
+import '../../models/note.dart';
 
 @immutable
 abstract class NoteListWidgetState extends Equatable {}
@@ -15,7 +15,7 @@ class NoteListWidgetLoadingState extends NoteListWidgetState {
 }
 
 class NoteListWidgetLoadedState extends NoteListWidgetState {
-  final List<NoteModel> notes;
+  final List<Note> notes;
 
   NoteListWidgetLoadedState(this.notes);
 

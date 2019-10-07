@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'models/note_model.dart';
+import '../../models/note.dart';
 
 class NoteListWidget extends StatefulWidget {
-  final List<NoteModel> items;
+  final List<Note> items;
 
   NoteListWidget(this.items);
 

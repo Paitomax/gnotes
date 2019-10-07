@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gnotes/src/add_note/add_note_bloc.dart';
 import 'package:gnotes/src/add_note/add_note_event.dart';
 import 'package:gnotes/src/add_note/add_note_state.dart';
-import 'package:gnotes/src/widgets/note_list/models/note_model.dart';
+import 'package:gnotes/src/models/note.dart';
 
 class AddNoteForm extends StatefulWidget {
   @override
@@ -66,8 +66,8 @@ class _AddNoteFormState extends State<AddNoteForm> {
           "Salvar",
         ),
         onPressed: () {
-          NoteModel note =
-              NoteModel(_titleController.text, _bodyController.text);
+          Note note = Note(_titleController.text, _bodyController.text,
+              DateTime.now(), DateTime.now());
           _bloc.dispatch(AddNoteSubmit(note));
         },
       ),
