@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import '../sign_in.dart';
+import '../auth_manager.dart';
 import './bloc.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
@@ -20,7 +19,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> _mapToLoginButtonPressedEvent() async* {
     try {
       yield LoginLoadingState();
-      await signInWithGoogle();
+      await AuthManager.signInWithGoogle();
       yield LoginLoggedInState();
     } catch (error) {
       yield LoginErrorState(error);

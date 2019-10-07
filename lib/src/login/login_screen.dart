@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gnotes/src/home/home_screen.dart';
 import 'package:gnotes/src/login/login_event.dart';
-import 'package:gnotes/src/sign_in.dart';
+import 'package:gnotes/src/auth_manager.dart';
 
 import 'login_bloc.dart';
 import 'login_state.dart';
