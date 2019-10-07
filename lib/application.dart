@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gnotes/src/home/home_screen.dart';
+import 'package:gnotes/src/login/login_screen.dart';
 
 class GNoteApplication extends StatelessWidget {
   @override
@@ -14,7 +14,7 @@ class GNoteApplication extends StatelessWidget {
         ),
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(),
+      home: LoginScreen(),
     );
   }
 }
