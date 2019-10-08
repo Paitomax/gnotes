@@ -7,6 +7,10 @@ import 'package:gnotes/src/add_note/add_note_state.dart';
 import 'package:gnotes/src/models/note.dart';
 
 class AddNoteForm extends StatefulWidget {
+  final Note note;
+
+  const AddNoteForm({Key key, this.note}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _AddNoteFormState();
@@ -20,6 +24,10 @@ class _AddNoteFormState extends State<AddNoteForm> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.note != null) {
+      _titleController.text = widget.note.title;
+      _bodyController.text = widget.note.body;
+    }
     return BlocBuilder<AddNoteBloc, AddNoteState>(
         bloc: _bloc,
         builder: (context, data) {
@@ -66,8 +74,12 @@ class _AddNoteFormState extends State<AddNoteForm> {
           "Salvar",
         ),
         onPressed: () {
-          Note note = Note(_titleController.text, _bodyController.text,
-              DateTime.now(), DateTime.now());
+          Note note = Note(
+              _titleController.text,
+              _bodyController.text,
+              widget.note != null ? widget.note.createTime : DateTime.now(),
+              DateTime.now(),
+              id: widget.note != null ? widget.note.id : null);
           _bloc.dispatch(AddNoteSubmit(note));
         },
       ),
