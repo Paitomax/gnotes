@@ -1,7 +1,18 @@
-abstract class AddNoteState {}
+import 'package:equatable/equatable.dart';
 
-class AddNoteUninitialized extends AddNoteState {}
+abstract class AddNoteState extends Equatable {}
 
-class AddNoteLoading extends AddNoteState {}
+class AddNoteUninitialized extends AddNoteState {
+  @override
+  List<Object> get props => [];
+}
 
-class AddNoteLoaded extends AddNoteState {}
+class AddNoteLoading extends AddNoteState {
+  @override
+  List<Object> get props => [];
+}
+
+class AddNoteLoaded extends AddNoteState {
+  @override
+  List<Object> get props => [];
+}
