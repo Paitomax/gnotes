@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gnotes/src/add_note/add_note_screen.dart';
 
 import '../../models/note.dart';
@@ -16,16 +17,6 @@ class NoteListWidget extends StatefulWidget {
 }
 
 class NoteListState extends State<NoteListWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.items.length,
-      itemBuilder: (BuildContext context, int index) {
-        return getNoteCardItem(context, index);
-      },
-    );
-  }
-
   getNoteCardItem(BuildContext context, int index) {
     return GestureDetector(
       child: Card(
@@ -60,5 +51,76 @@ class NoteListState extends State<NoteListWidget> {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return AddNoteScreen(note: note);
     }));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StaggeredGridView.countBuilder(
+      shrinkWrap: true,
+      crossAxisCount: 2,
+      itemCount: widget.items.length,
+      itemBuilder: (BuildContext context, int index) {
+        Note item = widget.items[index];
+        bool hasTitle = item.title != null;
+
+        if (hasTitle)
+          return itemWithTitle(item);
+        else
+          return itemWithoutTitle(item);
+      },
+      staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+      mainAxisSpacing: 2.0,
+      crossAxisSpacing: 2.0,
+    );
+  }
+
+  Widget itemWithTitle(Note item) {
+    return GestureDetector(
+      child: Card(
+        elevation: 0.3,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                item.title,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Text(
+                item.body,
+                textAlign: TextAlign.left,
+              ),
+            ],
+          ),
+        ),
+      ),
+      onTap: () => goToAddNoteScreen(item),
+    );
+  }
+
+  Widget itemWithoutTitle(Note item) {
+    return GestureDetector(
+        child: Card(
+      elevation: 0.3,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        child: Column(
+          children: <Widget>[
+            Text(
+              item.body,
+              textAlign: TextAlign.left,
+            ),
+          ],
+        ),
+      ),
+    ),
+      onTap: () => goToAddNoteScreen(item),
+    );
   }
 }
