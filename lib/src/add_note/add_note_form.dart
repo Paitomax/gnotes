@@ -30,16 +30,27 @@ class _AddNoteFormState extends State<AddNoteForm> {
     }
     return BlocBuilder<AddNoteBloc, AddNoteState>(
         bloc: _bloc,
-        builder: (context, data) {
-          return Form(
-            child: Column(
-              children: <Widget>[
-                getTitle(),
-                getBody(),
-                getSubmitButton(),
-              ],
-            ),
-          );
+        builder: (context, state) {
+          if (state is AddNoteError) {
+            return Text(state.error);
+          } else if (state is AddNoteLoading) {
+            return CircularProgressIndicator();
+          } else if (state is AddNoteLoaded) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.of(context).pop();
+            });
+            return CircularProgressIndicator();
+          } else {
+            return Form(
+              child: Column(
+                children: <Widget>[
+                  getTitle(),
+                  getBody(),
+                  getSubmitButton(),
+                ],
+              ),
+            );
+          }
         });
   }
 
@@ -74,11 +85,12 @@ class _AddNoteFormState extends State<AddNoteForm> {
           "Salvar",
         ),
         onPressed: () {
+          DateTime dateTimeNow = DateTime.now();
           Note note = Note(
               _titleController.text,
               _bodyController.text,
-              widget.note != null ? widget.note.createTime : DateTime.now(),
-              DateTime.now(),
+              widget.note != null ? widget.note.createTime : dateTimeNow,
+              dateTimeNow,
               id: widget.note != null ? widget.note.id : null);
           _bloc.dispatch(AddNoteSubmit(note));
         },

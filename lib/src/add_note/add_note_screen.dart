@@ -7,12 +7,14 @@ class AddNoteScreen extends StatelessWidget {
   final Note note;
 
   const AddNoteScreen({Key key, this.note}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-      title: Text("GNotes"),
-    ),
-    body: AddNoteForm(),);
+      appBar: AppBar(
+        title: Text("GNotes"),
+      ),
+      body: AddNoteForm(note: note),
+    );
   }
 }

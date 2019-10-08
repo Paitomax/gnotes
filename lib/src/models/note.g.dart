@@ -16,12 +16,10 @@ Note _$NoteFromJson(Map<String, dynamic> json) {
     json['lastTimeUpdated'] == null
         ? null
         : DateTime.parse(json['lastTimeUpdated'] as String),
-    id: json['id'] as String,
   );
 }
 
 Map<String, dynamic> _$NoteToJson(Note instance) => <String, dynamic>{
-      'id': instance.id,
       'title': instance.title,
       'body': instance.body,
       'createTime': instance.createTime?.toIso8601String(),

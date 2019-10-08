@@ -16,3 +16,12 @@ class AddNoteLoaded extends AddNoteState {
   @override
   List<Object> get props => [];
 }
+
+class AddNoteError extends AddNoteState {
+  final String error;
+
+  AddNoteError(this.error);
+
+  @override
+  List<Object> get props => [error];
+}

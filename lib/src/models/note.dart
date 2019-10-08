@@ -3,12 +3,16 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'note.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(ignoreUnannotated: true)
 class Note extends Equatable {
   String id;
+  @JsonKey(name: "title")
   final String title;
+  @JsonKey(name: "body")
   final String body;
+  @JsonKey(name: "createTime")
   final DateTime createTime;
+  @JsonKey(name: "lastTimeUpdated")
   final DateTime lastTimeUpdated;
 
   Note(this.title, this.body, this.createTime, this.lastTimeUpdated, {this.id});

@@ -55,39 +55,4 @@ class _HomeScreenState extends State<HomeScreen> {
       return AddNoteScreen();
     }));
   }
-
-//  List<Note> createMock() {
-//    List<Note> list = List<Note>();
-//    list.addAll([
-//      Note(
-//        'Jogar',
-//        'Hoje preciso jogar até o amanhecer',
-//        DateTime.now(),
-//        DateTime.now(),
-//        id: "1",
-//      ),
-//      Note(
-//        'Tarefa de inglês',
-//        'O baguiu vai ser louco se eu não fizer essas tarefas marotas.',
-//        DateTime.now(),
-//        DateTime.now(),
-//        id: "1",
-//      ),
-//      Note(
-//        'Aniversario da Line',
-//        'NÃO POSSO ESQUECER DE PARABENIZAR MEU AMORZÃO HOJE',
-//        DateTime.now(),
-//        DateTime.now(),
-//        id: "1",
-//      ),
-//      Note(
-//        'Ihuu',
-//        'Cansei de escrever os coiso tudo, quero ver logo essa tela',
-//        DateTime.now(),
-//        DateTime.now(),
-//        id: "1",
-//      ),
-//    ]);
-//    return list;
-//  }
 }

@@ -38,4 +38,19 @@ class StoreProvider {
 
     return notes;
   }
+
+  static Future<bool> addUpdateUserNote(String uid, Note note) async {
+    try {
+      await Firestore.instance
+          .collection("users")
+          .document(uid)
+          .collection('notes')
+          .document(note.id)
+          .setData(note.toJson(), merge: true);
+      return true;
+    }
+    catch(error){
+      return false;
+    }
+  }
 }

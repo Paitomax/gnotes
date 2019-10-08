@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gnotes/src/add_note/add_note_screen.dart';
 
 import '../../models/note.dart';
 
@@ -51,8 +52,13 @@ class NoteListState extends State<NoteListWidget> {
           ],
         ),
       ),
-      onTap: () => Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text("Cliquei no item $index"))),
+      onTap: () => goToAddNoteScreen(widget.items[index]),
     );
+  }
+
+  goToAddNoteScreen(Note note) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return AddNoteScreen(note: note);
+    }));
   }
 }
