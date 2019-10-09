@@ -33,11 +33,11 @@ class LoginScreenState extends State<LoginScreen> {
                 return _loadingIndicator();
               } else if (state is LoginLoggedInState) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  Navigator.of(context).push(MaterialPageRoute(
+                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
                     builder: (context) {
                       return HomeScreen();
                     },
-                  ));
+                  ), (Route<dynamic> route) => false);
                 });
                 return _loadingIndicator();
               }
