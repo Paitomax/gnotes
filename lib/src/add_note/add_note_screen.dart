@@ -116,9 +116,14 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   }
 
   _saveNoteAndExit() {
-    if ((_titleController.text.isEmpty && _bodyController.text.isEmpty) ||
-        (_titleController.text == widget.note.title &&
-            _bodyController.text == widget.note.body)) {
+    var textEmpty =
+        _titleController.text.isEmpty && _bodyController.text.isEmpty;
+    var newNote = widget.note == null;
+
+    if (textEmpty ||
+        !newNote &&
+            (_titleController.text == widget.note.title &&
+                _bodyController.text == widget.note.body)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pop();
       });
