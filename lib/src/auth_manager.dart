@@ -37,7 +37,5 @@ class AuthManager {
   static void signOutGoogle() async {
     await googleSignIn.signOut();
     loggedUser = null;
-
-    print("User Sign Out");
   }
 }

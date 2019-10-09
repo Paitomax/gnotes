@@ -67,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   onMenuSelected(String value) {
     if (value == "sair") {
+      AuthManager.signOutGoogle();
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
         builder: (context) {
           return LoginScreen();
