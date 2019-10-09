@@ -58,8 +58,12 @@ class NoteListState extends State<NoteListWidget> {
     return StaggeredGridView.countBuilder(
       shrinkWrap: true,
       crossAxisCount: 2,
-      itemCount: widget.items.length,
+      itemCount: widget.items.length + 1,
       itemBuilder: (BuildContext context, int index) {
+
+        if (index == widget.items.length){
+          return SizedBox(height: 80,);
+        }
         Note item = widget.items[index];
         bool hasTitle = item.title != null;
 
@@ -84,6 +88,7 @@ class NoteListState extends State<NoteListWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              _dateWidget(item),
               Text(
                 item.title,
                 textAlign: TextAlign.left,
@@ -104,23 +109,40 @@ class NoteListState extends State<NoteListWidget> {
     );
   }
 
+  String _dateString(DateTime dt1, DateTime dt2) {
+    DateTime dt = dt2.isAfter(dt1) ? dt2 : dt1;
+    return "${dt.day.toString().padLeft(2, '0')}/${dt.month.toString().padLeft(2, '0')}/${dt.year}";
+  }
+
   Widget itemWithoutTitle(Note item) {
     return GestureDetector(
-        child: Card(
-      elevation: 0.3,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-        child: Column(
-          children: <Widget>[
-            Text(
-              item.body,
-              textAlign: TextAlign.left,
-            ),
-          ],
+      child: Card(
+        elevation: 0.3,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          child: Column(
+            children: <Widget>[
+              _dateWidget(item),
+              Text(
+                item.body,
+                textAlign: TextAlign.left,
+              ),
+            ],
+          ),
         ),
       ),
-    ),
       onTap: () => goToAddNoteScreen(item),
+    );
+  }
+
+  Widget _dateWidget(Note item) {
+    return Container(
+      alignment: Alignment.topRight,
+      child: Text(
+        _dateString(item.createTime, item.lastTimeUpdated),
+        textAlign: TextAlign.right,
+        style: TextStyle(fontSize: 9, fontWeight: FontWeight.w400, letterSpacing: 1, color: Colors.blue),
+      ),
     );
   }
 }
