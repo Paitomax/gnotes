@@ -20,14 +20,16 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _bodyController = TextEditingController();
   AddNoteBloc _bloc = AddNoteBloc();
-
+  bool _newNote;
   final FocusNode _titleFocus = FocusNode();
   final FocusNode _bodyFocus = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    if (widget.note != null) {
+    _newNote = widget.note == null;
+
+    if (!_newNote) {
       _titleController.text = widget.note.title;
       _bodyController.text = widget.note.body;
     }
@@ -42,7 +44,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text("GNotes"),
+          title: Text(_newNote ? "Nova Nota" : "Editar Nota"),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: _saveNoteAndExit,
@@ -118,10 +120,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   _saveNoteAndExit() {
     var textEmpty =
         _titleController.text.isEmpty && _bodyController.text.isEmpty;
-    var newNote = widget.note == null;
 
     if (textEmpty ||
-        !newNote &&
+        !_newNote &&
             (_titleController.text == widget.note.title &&
                 _bodyController.text == widget.note.body)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
