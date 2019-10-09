@@ -87,6 +87,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     return Container(
       margin: EdgeInsets.only(top: 16, left: 16, right: 16),
       child: TextFormField(
+        textCapitalization: TextCapitalization.sentences,
         autofocus: true,
         focusNode: _titleFocus,
         textInputAction: TextInputAction.next,
@@ -105,6 +106,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     return Container(
       margin: EdgeInsets.only(top: 16, left: 16, right: 16),
       child: TextFormField(
+        textCapitalization: TextCapitalization.sentences,
         maxLength: 999,
         maxLines: 20,
         minLines: 1,
