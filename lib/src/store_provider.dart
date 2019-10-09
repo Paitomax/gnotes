@@ -35,6 +35,12 @@ class StoreProvider {
       note.id = doc.documentID;
       notes.add(note);
     });
+    notes.sort((a, b) {
+      if (a.lastTimeUpdated.isAfter(b.lastTimeUpdated))
+        return 0;
+      else
+        return 1;
+    });
 
     return notes;
   }
@@ -48,8 +54,7 @@ class StoreProvider {
           .document(note.id)
           .setData(note.toJson(), merge: true);
       return true;
-    }
-    catch(error){
+    } catch (error) {
       return false;
     }
   }
