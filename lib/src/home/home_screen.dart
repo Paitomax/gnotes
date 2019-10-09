@@ -6,6 +6,7 @@ import 'package:gnotes/src/auth_manager.dart';
 import 'package:gnotes/src/home/home_bloc.dart';
 import 'package:gnotes/src/home/home_event.dart';
 import 'package:gnotes/src/home/home_state.dart';
+import 'package:gnotes/src/login/login_screen.dart';
 import 'package:gnotes/src/models/note.dart';
 import 'package:gnotes/src/widgets/note_list/note_list_widget.dart';
 
@@ -21,33 +22,62 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     _bloc.dispatch(HomeFetchNotesEvent(AuthManager.loggedUser.uid));
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("GNotes"),
+    return WillPopScope(
+      onWillPop: () async {
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("GNotes"),
+          actions: <Widget>[
+            PopupMenuButton<String>(
+                onSelected: onMenuSelected,
+                itemBuilder: (BuildContext context) {
+                  return [
+                    PopupMenuItem<String>(
+                      value: "sair",
+                      child: Text("Sair"),
+                    ),
+                  ];
+                }),
+          ],
+        ),
+        body: BlocBuilder(
+          bloc: _bloc,
+          builder: (context, state) {
+            if (state is ErrorHomeState) {
+              return Container(
+                  alignment: Alignment.center, child: Text(state.error));
+            } else if (state is LoadingHomeState) {
+              return _circularProgress();
+            } else if (state is LoadedHomeState) {
+              return NoteListWidget(state.notes);
+            } else {
+              return _circularProgress();
+            }
+          },
+        ),
+        floatingActionButton: FloatingActionButton(
+            tooltip: "Adicionar novo",
+            child: Icon(Icons.add),
+            onPressed: goToAddNoteScreen),
       ),
-      body: BlocBuilder(
-        bloc: _bloc,
-        builder: (context, state) {
-          if (state is ErrorHomeState) {
-            return Container(alignment: Alignment.center, child: Text(state.error));
-          } else if (state is LoadingHomeState) {
-            return _circularProgress();
-          } else if (state is LoadedHomeState) {
-            return NoteListWidget(state.notes);
-          } else {
-            return _circularProgress();
-          }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-          tooltip: "Adicionar novo",
-          child: Icon(Icons.add),
-          onPressed: goToAddNoteScreen),
     );
   }
 
-  Widget _circularProgress(){
-    return Container(alignment: Alignment.center,child: CircularProgressIndicator());
+  onMenuSelected(String value) {
+    if (value == "sair") {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+        builder: (context) {
+          return LoginScreen();
+        },
+      ), (Route<dynamic> route) => false);
+    }
+  }
+
+  Widget _circularProgress() {
+    return Container(
+        alignment: Alignment.center, child: CircularProgressIndicator());
   }
 
   goToAddNoteScreen() {
