@@ -35,43 +35,49 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("GNotes"),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: _saveNoteAndExit,
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(FontAwesomeIcons.save),
+    return WillPopScope(
+      onWillPop: () async {
+        _saveNoteAndExit();
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("GNotes"),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
             onPressed: _saveNoteAndExit,
-          )
-        ],
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(FontAwesomeIcons.save),
+              onPressed: _saveNoteAndExit,
+            )
+          ],
+        ),
+        body: BlocBuilder<AddNoteBloc, AddNoteState>(
+            bloc: _bloc,
+            builder: (context, state) {
+              if (state is AddNoteError) {
+                return Text(state.error);
+              } else if (state is AddNoteLoading) {
+                return CircularProgressIndicator();
+              } else if (state is AddNoteLoaded) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  Navigator.of(context).pop();
+                });
+                return CircularProgressIndicator();
+              } else {
+                return Form(
+                  child: Column(
+                    children: <Widget>[
+                      getTitle(),
+                      getBody(),
+                    ],
+                  ),
+                );
+              }
+            }),
       ),
-      body: BlocBuilder<AddNoteBloc, AddNoteState>(
-          bloc: _bloc,
-          builder: (context, state) {
-            if (state is AddNoteError) {
-              return Text(state.error);
-            } else if (state is AddNoteLoading) {
-              return CircularProgressIndicator();
-            } else if (state is AddNoteLoaded) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.of(context).pop();
-              });
-              return CircularProgressIndicator();
-            } else {
-              return Form(
-                child: Column(
-                  children: <Widget>[
-                    getTitle(),
-                    getBody(),
-                  ],
-                ),
-              );
-            }
-          }),
     );
   }
 
@@ -79,6 +85,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     return Container(
       margin: EdgeInsets.only(top: 16, left: 16, right: 16),
       child: TextFormField(
+        autofocus: true,
         focusNode: _titleFocus,
         textInputAction: TextInputAction.next,
         onFieldSubmitted: (_) {
