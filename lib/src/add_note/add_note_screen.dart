@@ -74,8 +74,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                   return Form(
                     child: Column(
                       children: <Widget>[
-                        getTitle(),
-                        getBody(),
+                        _getTitle(),
+                        _getBody(),
                       ],
                     ),
                   );
@@ -86,7 +86,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     );
   }
 
-  getTitle() {
+  Widget _getTitle() {
     return Container(
       margin: EdgeInsets.only(top: 16, left: 16, right: 16),
       child: TextFormField(
@@ -105,7 +105,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     );
   }
 
-  getBody() {
+  Widget _getBody() {
     return Container(
       margin: EdgeInsets.only(top: 16, left: 16, right: 16),
       child: TextFormField(
