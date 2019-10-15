@@ -56,29 +56,32 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
             )
           ],
         ),
-        body: BlocBuilder<AddNoteBloc, AddNoteState>(
-            bloc: _bloc,
-            builder: (context, state) {
-              if (state is AddNoteError) {
-                return Text(state.error);
-              } else if (state is AddNoteLoading) {
-                return CircularProgressIndicator();
-              } else if (state is AddNoteLoaded) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  Navigator.of(context).pop();
-                });
-                return CircularProgressIndicator();
-              } else {
-                return Form(
-                  child: Column(
-                    children: <Widget>[
-                      getTitle(),
-                      getBody(),
-                    ],
-                  ),
-                );
-              }
-            }),
+        body: BlocListener(
+          bloc: _bloc,
+          listener: (context, state) {
+            if (state is AddNoteLoaded) {
+              Navigator.of(context).pop();
+            }
+          },
+          child: BlocBuilder<AddNoteBloc, AddNoteState>(
+              bloc: _bloc,
+              builder: (context, state) {
+                if (state is AddNoteError) {
+                  return Center(child: Text(state.error));
+                } else if (state is AddNoteLoading) {
+                  return CircularProgressIndicator();
+                } else {
+                  return Form(
+                    child: Column(
+                      children: <Widget>[
+                        getTitle(),
+                        getBody(),
+                      ],
+                    ),
+                  );
+                }
+              }),
+        ),
       ),
     );
   }
