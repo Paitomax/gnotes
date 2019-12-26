@@ -124,9 +124,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
   _saveNoteAndExit() {
     var textEmpty =
-        _titleController.text.isEmpty && _bodyController.text.isEmpty;
+        _titleController.text.trim().isEmpty && _bodyController.text.trim().isEmpty;
 
-    if (textEmpty ||
+    if (textEmpty && _newNote ||
         !_newNote &&
             (_titleController.text == widget.note.title &&
                 _bodyController.text == widget.note.body)) {
