@@ -10,11 +10,15 @@ class AddNoteBloc extends Bloc<NoteEvent, AddNoteState> {
   AddNoteState get initialState => AddNoteUninitialized();
 
   @override
-  Stream<AddNoteState> mapEventToState(NoteEvent event) async*{
-    if (event is AddNote){
-      yield AddNoteLoading();
-      StoreProvider.addUpdateUserNote(AuthManager.loggedUser.uid, event.note);
-      yield AddNoteLoaded();
+  Stream<AddNoteState> mapEventToState(NoteEvent event) async* {
+    if (event is AddNote) {
+      yield* _mapAddNote(event);
     }
+  }
+
+  Stream<AddNoteState> _mapAddNote(NoteEvent event) async* {
+    yield AddNoteLoading();
+    StoreProvider.addUpdateUserNote(AuthManager.loggedUser.uid, event.note);
+    yield AddNoteLoaded();
   }
 }
