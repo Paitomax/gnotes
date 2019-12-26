@@ -10,3 +10,11 @@ class AddNote extends NoteEvent {
   @override
   List<Object> get props => [note];
 }
+
+class DeleteNote extends NoteEvent {
+  final Note note;
+  DeleteNote(this.note);
+
+  @override
+  List<Object> get props => [note];
+}
