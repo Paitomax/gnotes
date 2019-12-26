@@ -17,34 +17,17 @@ class NoteListWidget extends StatefulWidget {
 }
 
 class NoteListState extends State<NoteListWidget> {
-  getNoteCardItem(BuildContext context, int index) {
-    return GestureDetector(
-      child: Card(
-        margin: const EdgeInsets.fromLTRB(4, 8, 4, 0),
-        elevation: 1,
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
-              child: Text(
-                widget.items[index].title,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
-              child: Text(
-                widget.items[index].body,
-                textAlign: TextAlign.justify,
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
-              ),
-            )
-          ],
-        ),
-      ),
-      onTap: () => goToAddNoteScreen(widget.items[index]),
-    );
+  List<String> selectionIndex = [];
+  bool selectionMode = false;
+
+  selectCard(Note note) {
+    if (selectionIndex.contains(note.id))
+      selectionIndex.remove(note.id);
+    else
+      selectionIndex.add(note.id);
+
+    selectionMode = selectionIndex.length > 0;
+    setState(() {});
   }
 
   goToAddNoteScreen(Note note) {
@@ -60,17 +43,14 @@ class NoteListState extends State<NoteListWidget> {
       crossAxisCount: 2,
       itemCount: widget.items.length + 1,
       itemBuilder: (BuildContext context, int index) {
-
-        if (index == widget.items.length){
-          return SizedBox(height: 80,);
+        if (index == widget.items.length) {
+          return SizedBox(
+            height: 80,
+          );
         }
-        Note item = widget.items[index];
-        bool hasTitle = item.title != null;
 
-        if (hasTitle)
-          return itemWithTitle(item);
-        else
-          return itemWithoutTitle(item);
+        Note item = widget.items[index];
+        return itemWithTitle(item);
       },
       staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
       mainAxisSpacing: 2.0,
@@ -78,9 +58,22 @@ class NoteListState extends State<NoteListWidget> {
     );
   }
 
+  isSelected(Note note) {
+    if (!selectionMode)
+      return false;
+    else
+      return selectionIndex.contains(note.id);
+  }
+
   Widget itemWithTitle(Note item) {
     return GestureDetector(
       child: Card(
+        shape: isSelected(item)
+            ? RoundedRectangleBorder(
+                side: BorderSide(width: 2),
+                borderRadius: BorderRadius.all(Radius.circular(8)))
+            : RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8))),
         elevation: 0.3,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
@@ -105,7 +98,15 @@ class NoteListState extends State<NoteListWidget> {
           ),
         ),
       ),
-      onTap: () => goToAddNoteScreen(item),
+      onTap: () {
+        if (selectionMode)
+          selectCard(item);
+        else
+          goToAddNoteScreen(item);
+      },
+      onLongPress: () {
+        selectCard(item);
+      },
     );
   }
 
@@ -114,34 +115,17 @@ class NoteListState extends State<NoteListWidget> {
     return "${dt.day.toString().padLeft(2, '0')}/${dt.month.toString().padLeft(2, '0')}/${dt.year}";
   }
 
-  Widget itemWithoutTitle(Note item) {
-    return GestureDetector(
-      child: Card(
-        elevation: 0.3,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-          child: Column(
-            children: <Widget>[
-              _dateWidget(item),
-              Text(
-                item.body,
-                textAlign: TextAlign.left,
-              ),
-            ],
-          ),
-        ),
-      ),
-      onTap: () => goToAddNoteScreen(item),
-    );
-  }
-
   Widget _dateWidget(Note item) {
     return Container(
       alignment: Alignment.topRight,
       child: Text(
         _dateString(item.createTime, item.lastTimeUpdated),
         textAlign: TextAlign.right,
-        style: TextStyle(fontSize: 9, fontWeight: FontWeight.w400, letterSpacing: 1, color: Colors.blue),
+        style: TextStyle(
+            fontSize: 9,
+            fontWeight: FontWeight.w400,
+            letterSpacing: 1,
+            color: Colors.blue),
       ),
     );
   }
