@@ -140,6 +140,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     Note note = Note(_titleController.text, _bodyController.text,
         widget.note != null ? widget.note.createTime : dateTimeNow, dateTimeNow,
         id: widget.note != null ? widget.note.id : null);
-    _bloc.dispatch(AddNoteSubmit(note));
+    _bloc.dispatch(AddNote(note));
   }
 }

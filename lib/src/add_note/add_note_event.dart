@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:gnotes/src/models/note.dart';
 
-abstract class AddNoteEvent extends Equatable {}
+abstract class NoteEvent extends Equatable {}
 
-class AddNoteSubmit extends AddNoteEvent {
+class AddNote extends NoteEvent {
   final Note note;
-  AddNoteSubmit(this.note);
+  AddNote(this.note);
 
   @override
   List<Object> get props => [note];
