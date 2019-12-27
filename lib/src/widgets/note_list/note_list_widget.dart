@@ -112,6 +112,8 @@ class NoteListState extends State<NoteListWidget> {
               Text(
                 item.body,
                 textAlign: TextAlign.left,
+                maxLines: 10,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
