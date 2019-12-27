@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthManager {
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseAuth auth = FirebaseAuth.instance;
   static final GoogleSignIn googleSignIn = GoogleSignIn();
   static FirebaseUser loggedUser;
 
@@ -21,12 +21,12 @@ class AuthManager {
     );
 
     final FirebaseUser user =
-        (await _auth.signInWithCredential(credential)).user;
+        (await auth.signInWithCredential(credential)).user;
 
     assert(!user.isAnonymous);
     assert(await user.getIdToken() != null);
 
-    final FirebaseUser currentUser = await _auth.currentUser();
+    final FirebaseUser currentUser = await auth.currentUser();
     assert(user.uid == currentUser.uid);
 
     loggedUser = user;
@@ -35,6 +35,7 @@ class AuthManager {
   }
 
   static void signOutGoogle() async {
+    await auth.signOut();
     await googleSignIn.signOut();
     loggedUser = null;
   }
