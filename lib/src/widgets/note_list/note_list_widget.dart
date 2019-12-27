@@ -7,13 +7,10 @@ import 'package:gnotes/src/widgets/note_list/note_list_bloc.dart';
 import 'package:gnotes/src/widgets/note_list/note_list_event.dart';
 import 'package:gnotes/src/widgets/note_list/note_list_state.dart';
 
+import '../../auth_manager.dart';
 import '../../models/note.dart';
 
 class NoteListWidget extends StatefulWidget {
-  final List<Note> items;
-
-  NoteListWidget(this.items);
-
   @override
   State<StatefulWidget> createState() {
     return NoteListState();
@@ -25,46 +22,65 @@ class NoteListState extends State<NoteListWidget> {
 
   @override
   void initState() {
+    _bloc = BlocProvider.of<NoteListWidgetBloc>(context);
+    _bloc.add(NoteListWidgetFetchNotesEvent());
+
     super.initState();
+
   }
 
-  goToAddNoteScreen(Note note) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+  goToAddNoteScreen(Note note) async {
+    await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return AddNoteScreen(note: note);
     }));
+    BlocProvider.of<NoteListWidgetBloc>(context)
+        .add(NoteListWidgetFetchNotesEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    _bloc = BlocProvider.of<NoteListWidgetBloc>(context);
+
 
     return BlocBuilder(
       bloc: _bloc,
       builder: (context, state) {
-        if (state is NoteListWidgetSelectionChangedState) {
+        if (state is NoteListWidgetLoadingState) {
+          return _circularProgress();
+        } else if (state is ErrorNoteListWidgetState) {
+          return Container(
+              alignment: Alignment.center, child: Text(state.error));
+        } else if (state is NoteListWidgetLoadedState) {
+          return _buildGridView(state.notes, [], false);
+        } else if (state is NoteListWidgetSelectionChangedState) {
           bool selectionMode = state.listNoteIdSelection.isEmpty == false;
-          return StaggeredGridView.countBuilder(
-            shrinkWrap: true,
-            crossAxisCount: 2,
-            itemCount: widget.items.length + 1,
-            itemBuilder: (BuildContext context, int index) {
-              if (index == widget.items.length) {
-                return SizedBox(
-                  height: 80,
-                );
-              }
-              Note item = widget.items[index];
-
-              bool selected = state.listNoteIdSelection.contains(item.id);
-              return itemWithTitle(item, selected, selectionMode);
-            },
-            staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-            mainAxisSpacing: 2.0,
-            crossAxisSpacing: 2.0,
-          );
+          return _buildGridView(
+              state.notes, state.listNoteIdSelection, selectionMode);
         } else
           return Container();
       },
+    );
+  }
+
+  _buildGridView(
+      List<Note> notes, List<String> notesIdSelected, bool selectionMode) {
+    return StaggeredGridView.countBuilder(
+      shrinkWrap: true,
+      crossAxisCount: 2,
+      itemCount: notes.length + 1,
+      itemBuilder: (BuildContext context, int index) {
+        if (index == notes.length) {
+          return SizedBox(
+            height: 80,
+          );
+        }
+        Note item = notes[index];
+
+        bool selected = notesIdSelected.contains(item.id);
+        return itemWithTitle(item, selected, selectionMode);
+      },
+      staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+      mainAxisSpacing: 2.0,
+      crossAxisSpacing: 2.0,
     );
   }
 
@@ -131,5 +147,10 @@ class NoteListState extends State<NoteListWidget> {
             color: Colors.blue),
       ),
     );
+  }
+
+  Widget _circularProgress() {
+    return Container(
+        alignment: Alignment.center, child: CircularProgressIndicator());
   }
 }

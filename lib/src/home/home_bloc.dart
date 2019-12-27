@@ -7,26 +7,8 @@ import './bloc.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final NoteListWidgetBloc listBloc;
-  StreamSubscription otherBlocSubscription;
 
-  HomeBloc(this.listBloc) {
-    otherBlocSubscription = listBloc.listen((state) {
-      if (state is NoteListWidgetSelectionChangedState){
-        if (state.listNoteIdSelection.isEmpty){
-          // add event
-        }
-        else{
-          // add event
-        }
-      }
-    });
-  }
-
-  @override
-  Future<Function> close() {
-    otherBlocSubscription.cancel();
-    return super.close();
-  }
+  HomeBloc(this.listBloc);
 
   @override
   HomeState get initialState => InitialHomeState();
@@ -34,20 +16,5 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   @override
   Stream<HomeState> mapEventToState(
     HomeEvent event,
-  ) async* {
-    if (event is HomeFetchNotesEvent) {
-      yield* _mapToHomeFetchNotesEvent(event);
-    }
-  }
-
-  Stream<HomeState> _mapToHomeFetchNotesEvent(
-      HomeFetchNotesEvent event) async* {
-    try {
-      yield LoadingHomeState();
-      var notes = await StoreProvider.getUserNotes(event.uid);
-      yield LoadedHomeState(notes);
-    } catch (error) {
-      yield ErrorHomeState(error);
-    }
-  }
+  ) async* {}
 }

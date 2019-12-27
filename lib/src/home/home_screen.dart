@@ -45,9 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<HomeBloc>(context)
-        .add(HomeFetchNotesEvent(AuthManager.loggedUser.uid));
-
     return BlocBuilder(
         bloc: BlocProvider.of<NoteListWidgetBloc>(context),
         builder: (context, state) {
@@ -79,16 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
               body: BlocBuilder(
                 bloc: BlocProvider.of<HomeBloc>(context),
                 builder: (context, state) {
-                  if (state is ErrorHomeState) {
-                    return Container(
-                        alignment: Alignment.center, child: Text(state.error));
-                  } else if (state is LoadingHomeState) {
-                    return _circularProgress();
-                  } else if (state is LoadedHomeState) {
-                    return NoteListWidget(state.notes);
-                  } else {
-                    return _circularProgress();
-                  }
+                    return NoteListWidget();
                 },
               ),
               floatingActionButton: FloatingActionButton(
@@ -114,14 +102,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Widget _circularProgress() {
-    return Container(
-        alignment: Alignment.center, child: CircularProgressIndicator());
-  }
-
-  goToAddNoteScreen() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+  goToAddNoteScreen() async {
+    await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return AddNoteScreen();
     }));
+    BlocProvider.of<NoteListWidgetBloc>(context)
+        .add(NoteListWidgetFetchNotesEvent());
   }
 }

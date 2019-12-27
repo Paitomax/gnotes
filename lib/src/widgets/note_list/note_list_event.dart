@@ -2,6 +2,13 @@ import 'package:equatable/equatable.dart';
 
 abstract class NoteListWidgetEvent extends Equatable {}
 
+class NoteListWidgetFetchNotesEvent extends NoteListWidgetEvent {
+  NoteListWidgetFetchNotesEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
 class NoteListWidgetSelectionChangedEvent extends NoteListWidgetEvent {
   final String id;
 
