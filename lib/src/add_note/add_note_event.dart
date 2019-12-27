@@ -5,6 +5,7 @@ abstract class NoteEvent extends Equatable {}
 
 class AddNote extends NoteEvent {
   final Note note;
+
   AddNote(this.note);
 
   @override
@@ -13,6 +14,7 @@ class AddNote extends NoteEvent {
 
 class DeleteNote extends NoteEvent {
   final Note note;
+
   DeleteNote(this.note);
 
   @override

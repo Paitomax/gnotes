@@ -11,14 +11,16 @@ class NoteListWidgetLoadingState extends NoteListWidgetState {
   String toString() => 'LoadTodos';
 
   @override
-  List<Object> get props => null;
+  List<Object> get props => [];
 }
 
-class NoteListWidgetLoadedState extends NoteListWidgetState {
-  final List<Note> notes;
+class NoteListWidgetSelectionChangedState extends NoteListWidgetState {
+  final List<String> listNoteIdSelection;
+  final int selectionCount;
 
-  NoteListWidgetLoadedState(this.notes);
+  NoteListWidgetSelectionChangedState(
+      this.listNoteIdSelection, this.selectionCount);
 
   @override
-  List<Object> get props => [notes];
+  List<Object> get props => [listNoteIdSelection, selectionCount];
 }

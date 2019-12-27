@@ -59,13 +59,13 @@ class StoreProvider {
     }
   }
 
-  static Future<bool> deleteUserNote(String uid, Note note) async {
+  static Future<bool> deleteUserNote(String uid, String noteId) async {
     try {
       await Firestore.instance
           .collection("users")
           .document(uid)
           .collection('notes')
-          .document(note.id)
+          .document(noteId)
           .delete();
       return true;
     } catch (error) {

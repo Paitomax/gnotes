@@ -142,8 +142,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         id: widget.note != null ? widget.note.id : null);
 
     if (!textEmpty)
-      _bloc.dispatch(AddNote(note));
+      _bloc.add(AddNote(note));
     else
-      _bloc.dispatch(DeleteNote(note));
+      _bloc.add(DeleteNote(note));
   }
 }

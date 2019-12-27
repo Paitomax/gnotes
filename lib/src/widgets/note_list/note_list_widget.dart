@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gnotes/src/add_note/add_note_screen.dart';
+import 'package:gnotes/src/widgets/note_list/note_list_bloc.dart';
+import 'package:gnotes/src/widgets/note_list/note_list_event.dart';
+import 'package:gnotes/src/widgets/note_list/note_list_state.dart';
 
 import '../../models/note.dart';
 
@@ -17,17 +21,11 @@ class NoteListWidget extends StatefulWidget {
 }
 
 class NoteListState extends State<NoteListWidget> {
-  List<String> selectionIndex = [];
-  bool selectionMode = false;
+  NoteListWidgetBloc _bloc;
 
-  selectCard(Note note) {
-    if (selectionIndex.contains(note.id))
-      selectionIndex.remove(note.id);
-    else
-      selectionIndex.add(note.id);
-
-    selectionMode = selectionIndex.length > 0;
-    setState(() {});
+  @override
+  void initState() {
+    super.initState();
   }
 
   goToAddNoteScreen(Note note) {
@@ -38,37 +36,42 @@ class NoteListState extends State<NoteListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StaggeredGridView.countBuilder(
-      shrinkWrap: true,
-      crossAxisCount: 2,
-      itemCount: widget.items.length + 1,
-      itemBuilder: (BuildContext context, int index) {
-        if (index == widget.items.length) {
-          return SizedBox(
-            height: 80,
-          );
-        }
+    _bloc = BlocProvider.of<NoteListWidgetBloc>(context);
 
-        Note item = widget.items[index];
-        return itemWithTitle(item);
+    return BlocBuilder(
+      bloc: _bloc,
+      builder: (context, state) {
+        if (state is NoteListWidgetSelectionChangedState) {
+          bool selectionMode = state.listNoteIdSelection.isEmpty == false;
+          return StaggeredGridView.countBuilder(
+            shrinkWrap: true,
+            crossAxisCount: 2,
+            itemCount: widget.items.length + 1,
+            itemBuilder: (BuildContext context, int index) {
+              if (index == widget.items.length) {
+                return SizedBox(
+                  height: 80,
+                );
+              }
+              Note item = widget.items[index];
+
+              bool selected = state.listNoteIdSelection.contains(item.id);
+              return itemWithTitle(item, selected, selectionMode);
+            },
+            staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+            mainAxisSpacing: 2.0,
+            crossAxisSpacing: 2.0,
+          );
+        } else
+          return Container();
       },
-      staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-      mainAxisSpacing: 2.0,
-      crossAxisSpacing: 2.0,
     );
   }
 
-  isSelected(Note note) {
-    if (!selectionMode)
-      return false;
-    else
-      return selectionIndex.contains(note.id);
-  }
-
-  Widget itemWithTitle(Note item) {
+  Widget itemWithTitle(Note item, bool selected, bool selectionMode) {
     return GestureDetector(
       child: Card(
-        shape: isSelected(item)
+        shape: selected
             ? RoundedRectangleBorder(
                 side: BorderSide(width: 2),
                 borderRadius: BorderRadius.all(Radius.circular(8)))
@@ -100,12 +103,12 @@ class NoteListState extends State<NoteListWidget> {
       ),
       onTap: () {
         if (selectionMode)
-          selectCard(item);
+          _bloc.add(NoteListWidgetSelectionChangedEvent(item.id));
         else
           goToAddNoteScreen(item);
       },
       onLongPress: () {
-        selectCard(item);
+        _bloc.add(NoteListWidgetSelectionChangedEvent(item.id));
       },
     );
   }

@@ -71,7 +71,7 @@ class LoginScreenState extends State<LoginScreen> {
     return OutlineButton(
       splashColor: Colors.purple[800],
       onPressed: () {
-        _bloc.dispatch(LoginButtonPressedEvent());
+        _bloc.add(LoginButtonPressedEvent());
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       highlightElevation: 0,

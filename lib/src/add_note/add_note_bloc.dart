@@ -27,7 +27,7 @@ class AddNoteBloc extends Bloc<NoteEvent, AddNoteState> {
 
   Stream<AddNoteState> _mapDeleteNote(Note note) async* {
     yield AddNoteLoading();
-    StoreProvider.deleteUserNote(AuthManager.loggedUser.uid, note);
+    StoreProvider.deleteUserNote(AuthManager.loggedUser.uid, note.id);
     yield AddNoteLoaded();
   }
 }

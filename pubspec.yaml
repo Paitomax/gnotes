@@ -24,8 +24,8 @@ dependencies:
   json_serializable: ^3.2.2
   meta: ^1.1.7
   equatable: ^0.6.1
-  bloc: ^0.15.0
-  flutter_bloc: ^0.21.0
+  bloc: 3.0.0
+  flutter_bloc: 3.0.0
   #shared_preferences: ^0.5.3+4
   #sqflite: ^1.1.7
   #rxdart: ^0.22.2
