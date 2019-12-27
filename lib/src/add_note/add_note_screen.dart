@@ -72,11 +72,14 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                   return CircularProgressIndicator();
                 } else {
                   return Form(
-                    child: Column(
-                      children: <Widget>[
-                        _getTitle(),
-                        _getBody(),
-                      ],
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          _buildTitle(),
+                          _buildBody(),
+                        ],
+                      ),
                     ),
                   );
                 }
@@ -86,7 +89,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     );
   }
 
-  Widget _getTitle() {
+  Widget _buildTitle() {
     return Container(
       margin: EdgeInsets.only(top: 16, left: 16, right: 16),
       child: TextFormField(
@@ -105,7 +108,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     );
   }
 
-  Widget _getBody() {
+  Widget _buildBody() {
     return Container(
       margin: EdgeInsets.only(top: 16, left: 16, right: 16),
       child: TextFormField(
