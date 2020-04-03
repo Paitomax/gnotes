@@ -56,34 +56,32 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
             )
           ],
         ),
-        body: BlocListener(
-          bloc: _bloc,
-          listener: (context, state) {
-            if (state is AddNoteLoaded) {
-              Navigator.of(context).pop();
-            }
-          },
-          child: BlocBuilder<AddNoteBloc, AddNoteState>(
-              bloc: _bloc,
-              builder: (context, state) {
-                if (state is AddNoteError) {
-                  return Center(child: Text(state.error));
-                } else if (state is AddNoteLoading) {
-                  return CircularProgressIndicator();
-                } else {
-                  return Form(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          _buildTitle(),
-                          _buildBody(),
-                        ],
-                      ),
+        body: BlocConsumer<AddNoteBloc, AddNoteState>(
+            listener: (context, state) {
+              if (state is AddNoteLoaded) {
+                Navigator.of(context).pop();
+              }
+            },
+            bloc: _bloc,
+            builder: (context, state) {
+              if (state is AddNoteError) {
+                return Center(child: Text(state.error));
+              } else if (state is AddNoteLoading) {
+                return CircularProgressIndicator();
+              } else {
+                return Form(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        _buildTitle(),
+                        _buildBody(),
+                      ],
                     ),
-                  );
-                }
-              }),
+                  ),
+                );
+              }
+            }
         ),
       ),
     );
