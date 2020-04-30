@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:gnotes/src/auth_manager.dart';
+import 'package:gnotes/src/auth/auth_repository.dart';
 import 'package:gnotes/src/models/note.dart';
 import 'package:gnotes/src/store_provider.dart';
 import 'package:gnotes/src/widgets/note_list/note_list_state.dart';
@@ -8,8 +8,11 @@ import 'note_list_event.dart';
 
 class NoteListWidgetBloc
     extends Bloc<NoteListWidgetEvent, NoteListWidgetState> {
+  final AuthRepository authRepository;
   List<String> _listNoteIdSelection = [];
   List<Note> _listNote;
+
+  NoteListWidgetBloc(this.authRepository);
 
   @override
   NoteListWidgetState get initialState => NoteListWidgetLoadingState();
@@ -31,7 +34,8 @@ class NoteListWidgetBloc
   Stream<NoteListWidgetState> _mapToNoteListWidgetFetchNotesEvent() async* {
     try {
       yield NoteListWidgetLoadingState();
-      var notes = await StoreProvider.getUserNotes(AuthManager.loggedUser.uid);
+      final user = await authRepository.getUser();
+      var notes = await StoreProvider.getUserNotes(user.uid);
       _listNote = notes;
       yield NoteListWidgetLoadedState(notes);
     } catch (error) {
@@ -55,8 +59,9 @@ class NoteListWidgetBloc
 
   Stream<NoteListWidgetState> _mapDeleteSelectedNotesEvent() async* {
     yield NoteListWidgetLoadingState();
+    final user = await authRepository.getUser();
     _listNoteIdSelection.forEach((noteId) {
-      StoreProvider.deleteUserNote(AuthManager.loggedUser.uid, noteId);
+      StoreProvider.deleteUserNote(user.uid, noteId);
     });
     _listNoteIdSelection.clear();
     yield* _mapToNoteListWidgetFetchNotesEvent();

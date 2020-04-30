@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:gnotes/src/auth_manager.dart';
+import 'package:gnotes/src/auth/auth_repository.dart';
 import 'package:gnotes/src/models/note.dart';
 import 'package:gnotes/src/store_provider.dart';
 
@@ -7,6 +7,10 @@ import 'add_note_event.dart';
 import 'add_note_state.dart';
 
 class AddNoteBloc extends Bloc<NoteEvent, AddNoteState> {
+  final AuthRepository authRepository;
+
+  AddNoteBloc(this.authRepository);
+
   @override
   AddNoteState get initialState => AddNoteUninitialized();
 
@@ -21,13 +25,15 @@ class AddNoteBloc extends Bloc<NoteEvent, AddNoteState> {
 
   Stream<AddNoteState> _mapAddNote(Note note) async* {
     yield AddNoteLoading();
-    StoreProvider.addUpdateUserNote(AuthManager.loggedUser.uid, note);
+    final user = await authRepository.getUser();
+    StoreProvider.addUpdateUserNote(user.uid, note);
     yield AddNoteLoaded();
   }
 
   Stream<AddNoteState> _mapDeleteNote(Note note) async* {
     yield AddNoteLoading();
-    StoreProvider.deleteUserNote(AuthManager.loggedUser.uid, note.id);
+    final user = await authRepository.getUser();
+    StoreProvider.deleteUserNote(user.uid, note.id);
     yield AddNoteLoaded();
   }
 }

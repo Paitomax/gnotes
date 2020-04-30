@@ -19,7 +19,7 @@ class AddNoteScreen extends StatefulWidget {
 class _AddNoteScreenState extends State<AddNoteScreen> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _bodyController = TextEditingController();
-  AddNoteBloc _bloc = AddNoteBloc();
+
   bool _newNote;
   final FocusNode _titleFocus = FocusNode();
   final FocusNode _bodyFocus = FocusNode();
@@ -56,33 +56,30 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
             )
           ],
         ),
-        body: BlocConsumer<AddNoteBloc, AddNoteState>(
-            listener: (context, state) {
-              if (state is AddNoteLoaded) {
-                Navigator.of(context).pop();
-              }
-            },
-            bloc: _bloc,
-            builder: (context, state) {
-              if (state is AddNoteError) {
-                return Center(child: Text(state.error));
-              } else if (state is AddNoteLoading) {
-                return CircularProgressIndicator();
-              } else {
-                return Form(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        _buildTitle(),
-                        _buildBody(),
-                      ],
-                    ),
-                  ),
-                );
-              }
-            }
-        ),
+        body:
+            BlocConsumer<AddNoteBloc, AddNoteState>(listener: (context, state) {
+          if (state is AddNoteLoaded) {
+            Navigator.of(context).pop();
+          }
+        }, builder: (context, state) {
+          if (state is AddNoteError) {
+            return Center(child: Text(state.error));
+          } else if (state is AddNoteLoading) {
+            return CircularProgressIndicator();
+          } else {
+            return Form(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    _buildTitle(),
+                    _buildBody(),
+                  ],
+                ),
+              ),
+            );
+          }
+        }),
       ),
     );
   }
@@ -124,8 +121,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   }
 
   _saveNoteAndExit() {
-    var textEmpty =
-        _titleController.text.trim().isEmpty && _bodyController.text.trim().isEmpty;
+    var textEmpty = _titleController.text.trim().isEmpty &&
+        _bodyController.text.trim().isEmpty;
 
     if (textEmpty && _newNote ||
         !_newNote &&
@@ -143,8 +140,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         id: widget.note != null ? widget.note.id : null);
 
     if (!textEmpty)
-      _bloc.add(AddNote(note));
+      BlocProvider.of<AddNoteBloc>(context).add(AddNote(note));
     else
-      _bloc.add(DeleteNote(note));
+      BlocProvider.of<AddNoteBloc>(context).add(DeleteNote(note));
   }
 }

@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gnotes/src/home/home_screen.dart';
 import 'package:gnotes/src/login/login_event.dart';
-import 'package:gnotes/src/auth_manager.dart';
 
 import 'login_bloc.dart';
 import 'login_state.dart';
@@ -17,28 +16,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  LoginBloc _bloc;
-
   @override
   Widget build(BuildContext context) {
-    _bloc = LoginBloc();
     return Scaffold(
       body: Container(
         color: Colors.white,
         child: Center(
-          child: BlocBuilder(
-            bloc: _bloc,
+          child: BlocBuilder<LoginBloc, LoginState>(
             builder: (context, state) {
               if (state is LoginLoadingState) {
-                return _loadingIndicator();
-              } else if (state is LoginLoggedInState) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                    builder: (context) {
-                      return HomeScreen();
-                    },
-                  ), (Route<dynamic> route) => false);
-                });
                 return _loadingIndicator();
               }
               return Column(
@@ -71,7 +57,7 @@ class LoginScreenState extends State<LoginScreen> {
     return OutlineButton(
       splashColor: Colors.purple[800],
       onPressed: () {
-        _bloc.add(LoginButtonPressedEvent());
+        BlocProvider.of<LoginBloc>(context).add(LoginButtonPressedEvent());
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       highlightElevation: 0,

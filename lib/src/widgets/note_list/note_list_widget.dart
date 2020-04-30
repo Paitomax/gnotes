@@ -7,7 +7,6 @@ import 'package:gnotes/src/widgets/note_list/note_list_bloc.dart';
 import 'package:gnotes/src/widgets/note_list/note_list_event.dart';
 import 'package:gnotes/src/widgets/note_list/note_list_state.dart';
 
-import '../../auth_manager.dart';
 import '../../models/note.dart';
 
 class NoteListWidget extends StatefulWidget {
@@ -26,7 +25,6 @@ class NoteListState extends State<NoteListWidget> {
     _bloc.add(NoteListWidgetFetchNotesEvent());
 
     super.initState();
-
   }
 
   goToAddNoteScreen(Note note) async {
@@ -39,8 +37,6 @@ class NoteListState extends State<NoteListWidget> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return BlocBuilder(
       bloc: _bloc,
       builder: (context, state) {
