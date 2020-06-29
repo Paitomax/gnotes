@@ -1,9 +1,9 @@
 import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gnotes/src/auth/auth_repository_interface.dart';
-import 'package:gnotes/src/models/user.dart';
-import 'package:gnotes/src/store_provider.dart';
+
 import './bloc.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -16,8 +16,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     firebaseStreamSubscription =
         firebaseAuth.onAuthStateChanged.listen((FirebaseUser user) async {
       if (user != null && (!user.isAnonymous)) {
-        if (state is AuthInitial)
-          await Future.delayed(Duration(seconds: 2));
+        if (state is AuthInitial) await Future.delayed(Duration(seconds: 2));
         add(AuthAlreadyLoggedIn(user));
       } else {
         add(AuthForcedLoggedOut());
