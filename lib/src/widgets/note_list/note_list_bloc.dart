@@ -34,7 +34,7 @@ class NoteListWidgetBloc
   Stream<NoteListWidgetState> _mapToNoteListWidgetFetchNotesEvent() async* {
     try {
       yield NoteListWidgetLoadingState();
-      final user = await authRepository.getUser();
+      final user = authRepository.getUser();
       var notes = await StoreProvider.getUserNotes(user.uid);
       _listNote = notes;
       yield NoteListWidgetLoadedState(notes);
@@ -59,7 +59,7 @@ class NoteListWidgetBloc
 
   Stream<NoteListWidgetState> _mapDeleteSelectedNotesEvent() async* {
     yield NoteListWidgetLoadingState();
-    final user = await authRepository.getUser();
+    final user = authRepository.getUser();
     _listNoteIdSelection.forEach((noteId) {
       StoreProvider.deleteUserNote(user.uid, noteId);
     });

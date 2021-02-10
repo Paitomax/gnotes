@@ -4,19 +4,19 @@ import 'package:gnotes/src/models/user.dart';
 
 class StoreProvider {
   static addUser(User user) async {
-    var firestore = Firestore.instance;
-    firestore.collection("users").document(user.id).get().then((doc) {
+    var firestore = FirebaseFirestore.instance;
+    firestore.collection("users").doc(user.id).get().then((doc) {
       if (!doc.exists) {
-        firestore.collection("users").document(user.id).setData(user.toJson());
+        firestore.collection("users").doc(user.id).update(user.toJson());
       }
     });
   }
 
   static Future<User> getUser(String id) async {
-    var firestore = Firestore.instance;
-    firestore.collection("users").document(id).get().then((doc) {
+    var firestore = FirebaseFirestore.instance;
+    firestore.collection("users").doc(id).get().then((doc) {
       if (!doc.exists) {
-        return User.fromJson(doc.data);
+        return User.fromJson(doc.data());
       } else
         return null;
     });
@@ -24,15 +24,15 @@ class StoreProvider {
   }
 
   static Future<List<Note>> getUserNotes(String uid) async {
-    var result = await Firestore.instance
+    var result = await FirebaseFirestore.instance
         .collection("users")
-        .document(uid)
+        .doc(uid)
         .collection('notes')
-        .getDocuments();
+        .snapshots().first;
     List<Note> notes = List<Note>();
-    result.documents.forEach((doc) {
-      Note note = Note.fromJson(doc.data);
-      note.id = doc.documentID;
+    result.docs.forEach((doc) {
+      Note note = Note.fromJson(doc.data());
+      note.id = doc.id;
       notes.add(note);
     });
     notes.sort((a, b) {
@@ -47,12 +47,12 @@ class StoreProvider {
 
   static Future<bool> addUpdateUserNote(String uid, Note note) async {
     try {
-      await Firestore.instance
+      await FirebaseFirestore.instance
           .collection("users")
-          .document(uid)
+          .doc(uid)
           .collection('notes')
-          .document(note.id)
-          .setData(note.toJson(), merge: true);
+          .doc(note.id)
+          .update(note.toJson());
       return true;
     } catch (error) {
       return false;
@@ -61,11 +61,11 @@ class StoreProvider {
 
   static Future<bool> deleteUserNote(String uid, String noteId) async {
     try {
-      await Firestore.instance
+      await FirebaseFirestore.instance
           .collection("users")
-          .document(uid)
+          .doc(uid)
           .collection('notes')
-          .document(noteId)
+          .doc(noteId)
           .delete();
       return true;
     } catch (error) {

@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gnotes/src/add_note/add_note_screen.dart';
 import 'package:gnotes/src/auth/bloc.dart';
 import 'package:gnotes/src/home/home_bloc.dart';
-import 'package:gnotes/src/login/login_screen.dart';
 import 'package:gnotes/src/widgets/note_list/note_list_bloc.dart';
 import 'package:gnotes/src/widgets/note_list/note_list_event.dart';
 import 'package:gnotes/src/widgets/note_list/note_list_state.dart';

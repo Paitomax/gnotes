@@ -25,14 +25,14 @@ class AddNoteBloc extends Bloc<NoteEvent, AddNoteState> {
 
   Stream<AddNoteState> _mapAddNote(Note note) async* {
     yield AddNoteLoading();
-    final user = await authRepository.getUser();
+    final user = authRepository.getUser();
     StoreProvider.addUpdateUserNote(user.uid, note);
     yield AddNoteLoaded();
   }
 
   Stream<AddNoteState> _mapDeleteNote(Note note) async* {
     yield AddNoteLoading();
-    final user = await authRepository.getUser();
+    final user = authRepository.getUser();
     StoreProvider.deleteUserNote(user.uid, note.id);
     yield AddNoteLoaded();
   }

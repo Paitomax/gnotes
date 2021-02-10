@@ -14,7 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthBloc(this.authRepository, this.firebaseAuth) {
     firebaseStreamSubscription =
-        firebaseAuth.onAuthStateChanged.listen((FirebaseUser user) async {
+        firebaseAuth.authStateChanges().listen((User user) async {
       if (user != null && (!user.isAnonymous)) {
         if (state is AuthInitial) await Future.delayed(Duration(seconds: 2));
         add(AuthAlreadyLoggedIn(user));

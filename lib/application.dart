@@ -7,6 +7,7 @@ import 'package:gnotes/src/home/home_bloc.dart';
 import 'package:gnotes/src/home/home_screen.dart';
 import 'package:gnotes/src/login/login_screen.dart';
 import 'package:gnotes/src/widgets/note_list/note_list_bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'src/add_note/add_note_bloc.dart';
 import 'src/auth/bloc.dart';
@@ -51,27 +52,37 @@ class GNoteApplication extends StatelessWidget {
   }
 
   Widget registerBlocProviders({Widget child}) {
-    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-    final authRepository = AuthRepository(firebaseAuth: firebaseAuth);
+    return FutureBuilder(
+      future: Firebase.initializeApp(),
+      initialData: null,
+      builder: (context, value) {
+        if (value.data == null) return Container();
 
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider<FirebaseAuth>(create: (_) => firebaseAuth),
-        RepositoryProvider<AuthRepository>(create: (_) => authRepository),
-      ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider<AuthBloc>(
-              create: (_) => AuthBloc(authRepository, firebaseAuth)),
-          BlocProvider<NoteListWidgetBloc>(
-              create: (_) => NoteListWidgetBloc(authRepository)),
-          BlocProvider<HomeBloc>(
-              create: (_) => HomeBloc(BlocProvider.of<NoteListWidgetBloc>(_))),
-          BlocProvider<LoginBloc>(create: (_) => LoginBloc(authRepository)),
-          BlocProvider<AddNoteBloc>(create: (_) => AddNoteBloc(authRepository)),
-        ],
-        child: child,
-      ),
+        final firebaseAuth = FirebaseAuth.instance;
+        final authRepository = AuthRepository(firebaseAuth: firebaseAuth);
+
+        return MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider<FirebaseAuth>(create: (_) => firebaseAuth),
+            RepositoryProvider<AuthRepository>(create: (_) => authRepository),
+          ],
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<AuthBloc>(
+                  create: (_) => AuthBloc(authRepository, firebaseAuth)),
+              BlocProvider<NoteListWidgetBloc>(
+                  create: (_) => NoteListWidgetBloc(authRepository)),
+              BlocProvider<HomeBloc>(
+                  create: (_) =>
+                      HomeBloc(BlocProvider.of<NoteListWidgetBloc>(_))),
+              BlocProvider<LoginBloc>(create: (_) => LoginBloc(authRepository)),
+              BlocProvider<AddNoteBloc>(
+                  create: (_) => AddNoteBloc(authRepository)),
+            ],
+            child: child,
+          ),
+        );
+      },
     );
   }
 }

@@ -9,7 +9,7 @@ abstract class AuthEvent extends Equatable {
 }
 
 class AuthAlreadyLoggedIn extends AuthEvent {
-  final FirebaseUser user;
+  final User user;
 
   AuthAlreadyLoggedIn(this.user);
 
