@@ -89,7 +89,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
       margin: EdgeInsets.only(top: 16, left: 16, right: 16),
       child: TextFormField(
         textCapitalization: TextCapitalization.sentences,
-        autofocus: true,
         focusNode: _titleFocus,
         textInputAction: TextInputAction.next,
         onFieldSubmitted: (_) {
@@ -111,6 +110,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         maxLength: 999,
         maxLines: 20,
         minLines: 1,
+        autofocus: true,
         focusNode: _bodyFocus,
         textInputAction: TextInputAction.newline,
         controller: _bodyController,
@@ -135,9 +135,13 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     }
 
     DateTime dateTimeNow = DateTime.now();
-    Note note = Note(_titleController.text, _bodyController.text,
-        widget.note != null ? widget.note.createTime : dateTimeNow, dateTimeNow,
-        id: widget.note != null ? widget.note.id : null);
+    Note note = Note(
+      _titleController.text,
+      _bodyController.text,
+      widget.note != null ? widget.note.createTime : dateTimeNow,
+      dateTimeNow,
+      id: widget.note != null ? widget.note.id : null,
+    );
 
     if (!textEmpty)
       BlocProvider.of<AddNoteBloc>(context).add(AddNote(note));
