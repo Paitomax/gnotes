@@ -32,8 +32,7 @@ class StoreProvider {
         .first;
     List<Note> notes = List<Note>();
     result.docs.forEach((doc) {
-      Note note = Note.fromJson(doc.data());
-      note.id = doc.id;
+      final note = Note.fromJson(doc.data()).copyWith(id: doc.id);
       notes.add(note);
     });
     notes.sort((a, b) {

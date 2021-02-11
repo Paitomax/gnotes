@@ -8,12 +8,12 @@ part of 'note.dart';
 
 Note _$NoteFromJson(Map<String, dynamic> json) {
   return Note(
-    json['title'] as String,
-    json['body'] as String,
-    json['createTime'] == null
+    title: json['title'] as String,
+    body: json['body'] as String,
+    createTime: json['createTime'] == null
         ? null
         : DateTime.parse(json['createTime'] as String),
-    json['lastTimeUpdated'] == null
+    lastTimeUpdated: json['lastTimeUpdated'] == null
         ? null
         : DateTime.parse(json['lastTimeUpdated'] as String),
   );

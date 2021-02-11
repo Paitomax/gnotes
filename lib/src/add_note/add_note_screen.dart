@@ -139,11 +139,11 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
     DateTime dateTimeNow = DateTime.now();
     Note note = Note(
-      _titleController.text,
-      _bodyController.text,
-      widget.note != null ? widget.note.createTime : dateTimeNow,
-      dateTimeNow,
       id: widget.note != null ? widget.note.id : null,
+      title: _titleController.text,
+      body: _bodyController.text,
+      createTime: widget.note != null ? widget.note.createTime : dateTimeNow,
+      lastTimeUpdated: dateTimeNow,
     );
 
     if (!textEmpty)

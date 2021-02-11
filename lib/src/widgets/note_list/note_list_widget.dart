@@ -38,7 +38,7 @@ class NoteListState extends State<NoteListWidget> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final cuts = (width / 300.0).floor();
+    final cuts = (width / 250).round();
 
     return BlocBuilder(
       bloc: _bloc,
