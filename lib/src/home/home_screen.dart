@@ -62,10 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: Text("GNotes"),
                 actions: <Widget>[
                   PopupMenuButton<String>(
-                      onSelected: onMenuSelected,
-                      itemBuilder: (BuildContext context) {
-                        return getMenuItems(selectionMode);
-                      }),
+                    onSelected: _onMenuSelected,
+                    itemBuilder: (BuildContext context) {
+                      return getMenuItems(selectionMode);
+                    },
+                  ),
                 ],
               ),
               body: BlocBuilder(
@@ -75,15 +76,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
               floatingActionButton: FloatingActionButton(
-                  tooltip: "Adicionar novo",
-                  child: Icon(Icons.add),
-                  onPressed: goToAddNoteScreen),
+                tooltip: 'Adicionar novo',
+                child: Icon(Icons.add),
+                onPressed: _goToAddNoteScreen,
+              ),
             ),
           );
         });
   }
 
-  onMenuSelected(String value) {
+  void _onMenuSelected(String value) {
     if (value == "sair") {
       BlocProvider.of<AuthBloc>(context).add(AuthLoggedOut());
 //      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
@@ -97,11 +99,15 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  goToAddNoteScreen() async {
-    await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return AddNoteScreen();
-    }));
-    BlocProvider.of<NoteListWidgetBloc>(context)
-        .add(NoteListWidgetFetchNotesEvent());
+  void _goToAddNoteScreen() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return AddNoteScreen();
+      }),
+    );
+    BlocProvider.of<NoteListWidgetBloc>(context).add(
+      NoteListWidgetFetchNotesEvent(),
+    );
   }
 }

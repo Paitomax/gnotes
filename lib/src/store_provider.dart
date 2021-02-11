@@ -28,7 +28,8 @@ class StoreProvider {
         .collection("users")
         .doc(uid)
         .collection('notes')
-        .snapshots().first;
+        .snapshots()
+        .first;
     List<Note> notes = List<Note>();
     result.docs.forEach((doc) {
       Note note = Note.fromJson(doc.data());
@@ -45,7 +46,20 @@ class StoreProvider {
     return notes;
   }
 
-  static Future<bool> addUpdateUserNote(String uid, Note note) async {
+  static Future<bool> addUserNote(String uid, Note note) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .collection('notes')
+          .add(note.toJson());
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  static Future<bool> updateUserNote(String uid, Note note) async {
     try {
       await FirebaseFirestore.instance
           .collection("users")

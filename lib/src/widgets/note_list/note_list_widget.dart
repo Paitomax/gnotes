@@ -37,6 +37,9 @@ class NoteListState extends State<NoteListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final cuts = (width / 300.0).floor();
+
     return BlocBuilder(
       bloc: _bloc,
       builder: (context, state) {
@@ -44,13 +47,19 @@ class NoteListState extends State<NoteListWidget> {
           return _circularProgress();
         } else if (state is ErrorNoteListWidgetState) {
           return Container(
-              alignment: Alignment.center, child: Text(state.error));
+            alignment: Alignment.center,
+            child: Text(state.error),
+          );
         } else if (state is NoteListWidgetLoadedState) {
-          return _buildGridView(state.notes, [], false);
+          return _buildGridView(state.notes, [], false, cuts);
         } else if (state is NoteListWidgetSelectionChangedState) {
           bool selectionMode = state.listNoteIdSelection.isEmpty == false;
           return _buildGridView(
-              state.notes, state.listNoteIdSelection, selectionMode);
+            state.notes,
+            state.listNoteIdSelection,
+            selectionMode,
+            cuts,
+          );
         } else
           return Container();
       },
@@ -58,10 +67,14 @@ class NoteListState extends State<NoteListWidget> {
   }
 
   _buildGridView(
-      List<Note> notes, List<String> notesIdSelected, bool selectionMode) {
+    List<Note> notes,
+    List<String> notesIdSelected,
+    bool selectionMode,
+    int cuts,
+  ) {
     return StaggeredGridView.countBuilder(
       shrinkWrap: true,
-      crossAxisCount: 2,
+      crossAxisCount: cuts,
       itemCount: notes.length + 1,
       itemBuilder: (BuildContext context, int index) {
         if (index == notes.length) {
@@ -86,30 +99,50 @@ class NoteListState extends State<NoteListWidget> {
         shape: selected
             ? RoundedRectangleBorder(
                 side: BorderSide(width: 2),
-                borderRadius: BorderRadius.all(Radius.circular(8)))
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              )
             : RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8))),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
         elevation: 0.3,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+          padding: const EdgeInsets.all(8.0),
+          child: Stack(
+            children: [
               _dateWidget(item),
-              Text(
-                item.title,
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 12,
+                  left: 8,
+                  right: 8,
+                  bottom: 8,
                 ),
-              ),
-              Text(
-                item.body,
-                textAlign: TextAlign.left,
-                maxLines: 10,
-                overflow: TextOverflow.ellipsis,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Visibility(
+                      visible: item.title.isNotEmpty,
+                      child: Text(
+                        item.title,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: item.body.isNotEmpty,
+                      child: Text(
+                        item.body,
+                        textAlign: TextAlign.left,
+                        maxLines: 10,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -129,7 +162,7 @@ class NoteListState extends State<NoteListWidget> {
 
   String _dateString(DateTime dt1, DateTime dt2) {
     DateTime dt = dt2.isAfter(dt1) ? dt2 : dt1;
-    return "${dt.day.toString().padLeft(2, '0')}/${dt.month.toString().padLeft(2, '0')}/${dt.year}";
+    return "${dt.day.toString().padLeft(2, '0')}/${dt.month.toString().padLeft(2, '0')}/${dt.year} - ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
   }
 
   Widget _dateWidget(Note item) {
@@ -139,10 +172,11 @@ class NoteListState extends State<NoteListWidget> {
         _dateString(item.createTime, item.lastTimeUpdated),
         textAlign: TextAlign.right,
         style: TextStyle(
-            fontSize: 9,
-            fontWeight: FontWeight.w400,
-            letterSpacing: 1,
-            color: Colors.blue),
+          fontSize: 9,
+          fontWeight: FontWeight.w400,
+          letterSpacing: 1,
+          color: Colors.blue,
+        ),
       ),
     );
   }

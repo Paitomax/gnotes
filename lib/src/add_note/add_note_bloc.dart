@@ -26,7 +26,10 @@ class AddNoteBloc extends Bloc<NoteEvent, AddNoteState> {
   Stream<AddNoteState> _mapAddNote(Note note) async* {
     yield AddNoteLoading();
     final user = authRepository.getUser();
-    StoreProvider.addUpdateUserNote(user.uid, note);
+    if (note.id == null)
+      StoreProvider.addUserNote(user.uid, note);
+    else
+      StoreProvider.updateUserNote(user.uid, note);
     yield AddNoteLoaded();
   }
 
