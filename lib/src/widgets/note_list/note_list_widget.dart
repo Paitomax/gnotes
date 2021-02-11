@@ -183,6 +183,8 @@ class NoteListState extends State<NoteListWidget> {
 
   Widget _circularProgress() {
     return Container(
-        alignment: Alignment.center, child: CircularProgressIndicator());
+      alignment: Alignment.center,
+      child: CircularProgressIndicator(),
+    );
   }
 }

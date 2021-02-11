@@ -6,6 +6,7 @@ import 'package:gnotes/src/add_note/add_note_bloc.dart';
 import 'package:gnotes/src/add_note/add_note_event.dart';
 import 'package:gnotes/src/add_note/add_note_state.dart';
 import 'package:gnotes/src/models/note.dart';
+import 'package:gnotes/src/strings.dart';
 
 class AddNoteScreen extends StatefulWidget {
   final Note note;
@@ -44,7 +45,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_newNote ? "Nova Nota" : "Editar Nota"),
+          title: Text(_newNote ? Strings.newNote : Strings.editNote),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: _saveNoteAndExit,
@@ -96,8 +97,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
           FocusScope.of(context).requestFocus(_bodyFocus);
         },
         controller: _titleController,
-        decoration:
-            InputDecoration(border: OutlineInputBorder(), labelText: "Titulo"),
+        decoration: InputDecoration(
+            border: OutlineInputBorder(), labelText: Strings.title),
       ),
     );
   }
@@ -115,7 +116,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         textInputAction: TextInputAction.newline,
         controller: _bodyController,
         decoration: InputDecoration(
-            border: OutlineInputBorder(), labelText: "Descricao"),
+          border: OutlineInputBorder(),
+          labelText: Strings.description,
+        ),
       ),
     );
   }

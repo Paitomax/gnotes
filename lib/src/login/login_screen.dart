@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gnotes/src/login/login_event.dart';
+import 'package:gnotes/src/strings.dart';
 
 import 'login_bloc.dart';
 import 'login_state.dart';
@@ -31,7 +32,7 @@ class LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "GNotes",
+                    Strings.appName,
                     style: TextStyle(
                       fontSize: 60,
                       color: Colors.purple[900],
@@ -71,7 +72,7 @@ class LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                'Entrar com Google',
+                Strings.signInWithGoogle,
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.blue,

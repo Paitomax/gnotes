@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gnotes/src/add_note/add_note_screen.dart';
 import 'package:gnotes/src/auth/bloc.dart';
 import 'package:gnotes/src/home/home_bloc.dart';
+import 'package:gnotes/src/strings.dart';
 import 'package:gnotes/src/widgets/note_list/note_list_bloc.dart';
 import 'package:gnotes/src/widgets/note_list/note_list_event.dart';
 import 'package:gnotes/src/widgets/note_list/note_list_state.dart';
@@ -15,6 +16,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  static const deleteValue = 'deletar';
+  static const exitValue = 'sair';
+
   @override
   void initState() {
     super.initState();
@@ -24,15 +28,15 @@ class _HomeScreenState extends State<HomeScreen> {
     if (selectionMode) {
       return [
         PopupMenuItem<String>(
-          value: "deletar",
-          child: Text("Deletar"),
+          value: deleteValue,
+          child: Text(Strings.delete),
         ),
       ];
     } else {
       return [
         PopupMenuItem<String>(
-          value: "sair",
-          child: Text("Sair"),
+          value: exitValue,
+          child: Text(Strings.exit),
         ),
       ];
     }
@@ -59,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: Scaffold(
               appBar: AppBar(
-                title: Text("GNotes"),
+                title: Text(Strings.appName),
                 actions: <Widget>[
                   PopupMenuButton<String>(
                     onSelected: _onMenuSelected,
@@ -76,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
               floatingActionButton: FloatingActionButton(
-                tooltip: 'Adicionar novo',
+                tooltip: Strings.addNew,
                 child: Icon(Icons.add),
                 onPressed: _goToAddNoteScreen,
               ),
@@ -86,14 +90,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onMenuSelected(String value) {
-    if (value == "sair") {
+    if (value == exitValue) {
       BlocProvider.of<AuthBloc>(context).add(AuthLoggedOut());
-//      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-//        builder: (context) {
-//          return LoginScreen();
-//        },
-//      ), (Route<dynamic> route) => false);
-    } else if (value == "deletar") {
+    } else if (value == deleteValue) {
       BlocProvider.of<NoteListWidgetBloc>(context)
           .add(DeleteSelectedNotesEvent());
     }
